@@ -13,9 +13,10 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 #UN = getpass.getuser()
-UN = ''
+#UN = ''
+UN = 'tkearney'
 PW = getpass.getpass(prompt='Please enter password for '+UN)
-BASEURL = ''
+BASEURL = 'https://morpheus.k24.lan'
 access_token = ''
 client_id = 'morph-api'
 plan_ids = []
@@ -53,6 +54,16 @@ def createTenant(access_token, TENANT):
     tenants = r.json()
     print(json.dumps(tenants, indent=4))
 
+def createGroup(access_token, TENANT):
+    headers = {'Authorization': 'BEARER '+access_token}
+    tenant_api_url = BASEURL+'/api/groups'
+    params={'max': '1000'}
+    data="{'group':{'name': "+TENANT+" }}"
+    r = requests.post(tenant_api_url, headers=headers, params=params, data=data, verify=False)
+    tenants = r.json()
+    print(json.dumps(tenants, indent=4))
+
 args_parser(PW)
 getToken(UN,PW)
 createTenant(access_token,TENANT)
+createGroup(access_token,TENANT)
